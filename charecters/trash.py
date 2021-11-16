@@ -23,17 +23,17 @@ class Trash:
             self.trash_type = trash_types[0]
             self.trash_points = 1
             self.image = trash_images[0]
-            self.velocity = random.randint(2, 5) if self.is_start_left else random.randint(-5, -2)
+            self.velocity = random.uniform(1.0, 3.0) if self.is_start_left else random.uniform(-3.0, -1.0)
         elif 12 < choice < 18:
             self.trash_points = 2
             self.trash_type = trash_types[1]
             self.image = trash_images[1]
-            self.velocity = random.randint(1, 4) if self.is_start_left else random.randint(-6, -3)
+            self.velocity = random.uniform(2.0, 4.0) if self.is_start_left else random.uniform(-4.0, -2.0)
         else:
             self.trash_points = 3
             self.trash_type = trash_types[2]
             self.image = trash_images[2]
-            self.velocity = random.randint(1, 3) if self.is_start_left else random.randint(-6, -1)
+            self.velocity = random.uniform(4.0, 6.0) if self.is_start_left else random.uniform(-5.0, -6.0)
 
     def draw_and_update(self, screen):
         if not self.cool_down_time_done:

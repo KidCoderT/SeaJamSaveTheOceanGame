@@ -1,12 +1,14 @@
 import math
 import random
 
+import pygame.math
+
 from constants import *
 
 
 class Boat:
     IMG = boat_image
-    START_POS = ((SCREEN_WIDTH / 2)-(IMG.get_width()/2), (SCREEN_HEIGHT / 2)-(IMG.get_height()/2))
+    START_POS = ((SCREEN_WIDTH / 2) - (IMG.get_width() / 2), (SCREEN_HEIGHT / 2) - (IMG.get_height() / 2))
 
     def __init__(self, max_vel, rotation_vel):
         self.img = self.IMG
@@ -75,4 +77,12 @@ class Boat:
             self.particles.append(
                 [[self.x + (boat_image.get_width() / 2), self.y + (boat_image.get_height() / 2)],
                  [random.randint(0, 20) / 10 - 1, -2],
-                 random.randint(int(self.vel) * 2, int(self.vel + 2) * 2) * 0.9])
+                 random.randint(int(self.vel) * 3, int(self.vel + 2) * 3) * 0.9])
+
+    def move_to_whirlpool(self, whirlpool_cx, whirlpool_cy, area_of_whirlpool):
+
+        force_x = float(whirlpool_cx - self.x) / 5
+        force_y = float(whirlpool_cy - self.y) / 5
+
+        self.x += (force_x - self.vel) * 0.05
+        self.y += (force_y - self.vel) * 0.05
