@@ -13,6 +13,7 @@ from ocean import Ocean
 
 screen = pygame.display.set_mode((SCREEN_WIDTH * 1.1, SCREEN_HEIGHT * 1.1))
 pygame.display.set_caption("Clean the Ocean")
+pygame.display.set_icon(pygame.image.load("assets/icon.ico"))
 screen_width, screen_height = (SCREEN_WIDTH, SCREEN_HEIGHT)
 game_display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 shop_display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -31,6 +32,7 @@ last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
 wait_time_to_increase_trash_amount = 5000
 last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
 paused = False
+lives = 3
 
 while running:
     clock.tick(60)
@@ -47,15 +49,23 @@ while running:
 
         if whirlpool is not None and not whirlpool.should_warn():
             whirlpool.draw(game_display)
-            whirlpool_mask = pygame.mask.from_surface(whirlpool.image)
 
-            boat.move_to_whirlpool(whirlpool.x,
-                                   whirlpool.y,
-                                   whirlpool.image.get_width() * whirlpool.image.get_height())
+            shrunk_whirlpool_mask = pygame.mask.from_surface(scale_image(whirlpool.image, 0.25))
+
+            if not boat.died:
+                if boat.mask.overlap(shrunk_whirlpool_mask, (int(whirlpool.x - boat.x), int(whirlpool.y - boat.y))):
+                    lives -= 1
+                    boat.img = None
+                    boat.died = True
+                    boat.death_time = pygame.time.get_ticks()
+                else:
+                    boat.move_to_whirlpool(whirlpool.x,
+                                           whirlpool.y,
+                                           whirlpool.image.get_width() * whirlpool.image.get_height())
 
             if whirlpool.y >= SCREEN_HEIGHT + whirl_pool_image.get_height() + 10:
                 whirlpool = None
-                last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
+                last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
             else:
                 whirlpool.update()
 
@@ -80,16 +90,12 @@ while running:
                 trashes.remove(trash)
                 trashes.append(Trash())
 
-            trash_mask = pygame.mask.from_surface(pygame.transform.rotate(trash.image, trash.angle))
-
             if whirlpool is not None:
-                whirlpool_mask = pygame.mask.from_surface(whirlpool.image)
-
-                if whirlpool_mask.overlap(trash_mask, (int(whirlpool.x - trash.x), int(whirlpool.y - trash.y))):
+                if whirlpool.mask.overlap(trash.mask, (int(whirlpool.x - trash.x), int(whirlpool.y - trash.y))):
                     trashes.remove(trash)
                     trashes.append(Trash())
 
-            if boat.collide(trash_mask, trash.x, trash.y) and trashes.index(trash) != -1:
+            if not boat.died and boat.collide(trash.mask, trash.x, trash.y) and trashes.count(trash) != 0:
                 score += trash.trash_points
                 coin_anim_sprites.append(CoinGotAnimation(trash.x, trash.y, trash.trash_points))
                 trashes.remove(trash)
@@ -98,7 +104,26 @@ while running:
         if whirlpool is not None and whirlpool.should_warn():
             whirlpool.warn(game_display, spicy_rice_warning_font)
 
-        boat.draw(game_display)
+        if not boat.died:
+            boat.draw(game_display)
+
+            keys = pygame.key.get_pressed()
+            moved = False
+
+            if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                boat.rotate(left=True)
+            if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                boat.rotate(right=True)
+
+            if keys[pygame.K_w] or keys[pygame.K_UP]:
+                moved = True
+                boat.move_forward()
+            if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+                moved = True
+                boat.move_backward()
+
+            if not moved:
+                boat.reduce_speed()
 
         for coin in coin_anim_sprites:
             coin.draw(game_display, spicy_rice_coin_font)
@@ -108,27 +133,20 @@ while running:
             if now - coin.created_time >= 500:
                 coin_anim_sprites.remove(coin)
 
-        keys = pygame.key.get_pressed()
-        moved = False
-
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            boat.rotate(left=True)
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            boat.rotate(right=True)
-
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            moved = True
-            boat.move_forward()
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            moved = True
-            boat.move_backward()
-
-        if not moved:
-            boat.reduce_speed()
-
-        if pygame.time.get_ticks() - last_time_taken_to_create_whirlpool > 10000 and score > 50 and whirlpool is None:
+        if pygame.time.get_ticks() - last_time_taken_to_create_whirlpool > 10000 and score > 50 and whirlpool is None and not boat.died:
             whirlpool = WhirlPool()
             last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
+
+        if boat.died:
+            if pygame.time.get_ticks() - boat.death_time > 5000:
+                boat.reset()
+                boat.img = boat.IMG
+                boat.died = False
+                last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
+
+        if lives == 0:
+            running = False
+            continue
 
         boat.update_particles()
 
@@ -146,6 +164,12 @@ while running:
     screen.blit(score_background_image, (-2, -2))
     score_text = spicy_rice_font.render(str(score), "", pygame.Color(255, 255, 255))
     screen.blit(score_text, (110 - ((score_text.get_width() / 2) + 15), 15))
+
+    lives_image_index = 3 - lives
+
+    screen.blit(lives_background_image, (SCREEN_WIDTH + 2, -2))
+    screen.blit(lives_left_image[lives_image_index],
+                (SCREEN_WIDTH + 10, 5))
 
     pygame.display.update()
 

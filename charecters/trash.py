@@ -34,6 +34,7 @@ class Trash:
             self.trash_type = trash_types[2]
             self.image = trash_images[2]
             self.velocity = random.uniform(4.0, 6.0) if self.is_start_left else random.uniform(-5.0, -6.0)
+        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.image, self.angle))
 
     def draw_and_update(self, screen):
         if not self.cool_down_time_done:
@@ -55,6 +56,7 @@ class Trash:
             self.x += self.velocity
         else:
             self.x += self.velocity - 2
+        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.image, self.angle))
 
     def has_crossed_edge(self):
         if self.x < -25:

@@ -19,12 +19,17 @@ class Boat:
         self.x, self.y = self.START_POS
         self.acceleration = 0.1
         self.particles = []
+        self.died = False
+        self.death_time = None
+        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
 
     def rotate(self, left=False, right=False):
         if left:
             self.angle += self.rotation_vel
         elif right:
             self.angle -= self.rotation_vel
+
+        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
 
     def draw(self, win):
         blit_and_rotate_center(win, self.img, (self.x, self.y), self.angle)
@@ -44,6 +49,7 @@ class Boat:
 
         self.y -= vertical
         self.x -= horizontal
+        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
 
     def collide(self, mask, x=0, y=0):
         boat_mask = pygame.mask.from_surface(self.img)

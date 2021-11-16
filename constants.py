@@ -29,3 +29,10 @@ spicy_rice_coin_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 24)
 spicy_rice_warning_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 64)
 
 pause_image = pygame.image.load("assets/pause indicator and button.png")
+
+lives_left_image = [
+    scale_image(pygame.image.load("assets/3 life.png"), 0.1),
+    scale_image(pygame.image.load("assets/2 life.png"), 0.1),
+    scale_image(pygame.image.load("assets/1 life.png"), 0.1)
+]
+lives_background_image = scale_image(pygame.image.load("assets/lives bg.png"), 0.4)
