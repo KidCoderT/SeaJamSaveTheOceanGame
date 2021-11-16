@@ -25,7 +25,7 @@ boat = Boat(3, 3)
 clock = pygame.time.Clock()
 trashes = [Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash()]
 coin_anim_sprites = []
-score = 50
+score = 0
 whirlpool = None
 screen_offset = [0, 0]
 last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
@@ -50,7 +50,7 @@ while running:
         if whirlpool is not None and not whirlpool.should_warn():
             whirlpool.draw(game_display)
 
-            shrunk_whirlpool_mask = pygame.mask.from_surface(scale_image(whirlpool.image, 0.25))
+            shrunk_whirlpool_mask = pygame.mask.from_surface(scale_image(whirlpool.image, 0.3))
 
             if not boat.died:
                 if boat.mask.overlap(shrunk_whirlpool_mask, (int(whirlpool.x - boat.x), int(whirlpool.y - boat.y))):
@@ -76,7 +76,8 @@ while running:
             screen_offset[0] = random.randint(0, 8) - 4
             screen_offset[1] = random.randint(0, 8) - 4
 
-        boat.draw_particles(game_display)
+        if not boat.died and boat.img is not None:
+            boat.draw_particles(game_display)
 
         if pygame.time.get_ticks() - last_time_taken_to_increase_trash_amount > wait_time_to_increase_trash_amount:
             last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
