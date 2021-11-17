@@ -33,7 +33,8 @@ shop_background = scale_image(pygame.image.load("assets/shop_bg.png"), 0.2)
 spicy_rice_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 32)
 spicy_rice_coin_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 24)
 spicy_rice_warning_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 64)
-spicy_rice_death_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 124)
+spicy_rice_death_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 62)
+spicy_rice_death_subtitle_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 20)
 
 pause_image = pygame.image.load("assets/pause indicator and button.png")
 

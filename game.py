@@ -34,6 +34,8 @@ last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
 whirl_pool_spawn_time = 10000
 paused = False
 lives = 3
+death_done_wait_time = 0
+death_subtitle = ""
 
 border_mask = pygame.mask.from_surface(
     pygame.transform.scale(pygame.image.load("assets/border.png"), (SCREEN_WIDTH + 16, SCREEN_HEIGHT + 30)))
@@ -62,6 +64,7 @@ while running:
                     boat.img = None
                     boat.died = True
                     boat.death_time = pygame.time.get_ticks()
+                    death_subtitle = "You got sucked into the whirlpool be careful they have a very strong pull force."
                 else:
                     boat.move_to_whirlpool(whirlpool.x, whirlpool.y)
 
@@ -132,6 +135,32 @@ while running:
             if boat.collide(border_mask) is not None:
                 boat.bounce()
 
+            if not (-10 < boat.y < SCREEN_HEIGHT + 10):
+                if death_done_wait_time == 0:
+                    death_done_wait_time = pygame.time.get_ticks()
+                else:
+                    if pygame.time.get_ticks() - death_done_wait_time >= 1300:
+                        lives -= 1
+                        boat.img = None
+                        boat.died = True
+                        boat.death_time = pygame.time.get_ticks()
+                        death_done_wait_time = 0
+                        death_subtitle = "The whirlpool flung you off to the side and we lost connection to the boat, " \
+                                         "be carefull!! "
+
+            elif boat.y > (SCREEN_HEIGHT + 10) - boat.img.get_height() or boat.y < -10 - boat.img.get_height():
+                if death_done_wait_time == 0:
+                    death_done_wait_time = pygame.time.get_ticks()
+                else:
+                    if pygame.time.get_ticks() - death_done_wait_time >= 1300:
+                        lives -= 1
+                        boat.img = None
+                        boat.died = True
+                        boat.death_time = pygame.time.get_ticks()
+                        death_done_wait_time = 0
+                        death_subtitle = "The whirlpool flung you off to the side and logded your boa onto our border and " \
+                                         "the boat got destroyed. "
+
         for coin in coin_anim_sprites:
             coin.draw(game_display, spicy_rice_coin_font)
             coin.update()
@@ -162,18 +191,23 @@ while running:
         death_text = spicy_rice_death_font.render("You Died!", False, (255, 0, 0))
         death_screen.blit(death_text, (
             (SCREEN_WIDTH / 2) - (death_text.get_width() / 2),
-            (SCREEN_HEIGHT / 2) - (death_text.get_height() / 2) - 70))
+            (SCREEN_HEIGHT / 2) - (death_text.get_height() / 2) - 55))
 
         respawn_time_in_amount = (pygame.time.get_ticks() - boat.death_time) // 1000
 
         respawn_time_text = spicy_rice_death_font.render(f"Respawning!", False, (255, 0, 0))
         death_screen.blit(respawn_time_text, (
             (SCREEN_WIDTH / 2) - (respawn_time_text.get_width() / 2),
-            (SCREEN_HEIGHT / 2) - (respawn_time_text.get_height() / 2) + 70))
+            (SCREEN_HEIGHT / 2) - (respawn_time_text.get_height() / 2)))
+
+        death_subtitle_text = spicy_rice_death_subtitle_font.render(death_subtitle, False, (255, 0, 0))
+        death_screen.blit(death_subtitle_text, (
+            (SCREEN_WIDTH / 2) - (death_subtitle_text.get_width() / 2),
+            (SCREEN_HEIGHT / 2) - (death_subtitle_text.get_height() / 2) + 55))
 
         screen.blit(pygame.transform.scale(death_screen, (SCREEN_WIDTH * 1.1, SCREEN_HEIGHT * 1.1)), (0, 0))
 
-        if time_left >= 5000 and whirlpool is None:
+        if time_left >= 10000 and whirlpool is None:
             boat.reset()
             boat.img = boat.IMG
             boat.died = False
