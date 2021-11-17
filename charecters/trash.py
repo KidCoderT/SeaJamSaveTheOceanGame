@@ -2,8 +2,6 @@ import random
 
 from constants import *
 
-trash_types = ["bottle", "tray", "barrel"]
-
 
 class Trash:
     def __init__(self, wait_time=random.randint(1000, 3000)):
@@ -18,22 +16,23 @@ class Trash:
         self.created_time = pygame.time.get_ticks()
         self.cool_down_time_done = False
         self.wait_time = wait_time
-        choice = random.randint(1, 20)
-        if choice < 13:
-            self.trash_type = trash_types[0]
+        choice = random.randint(1, 50)
+        if choice <= 30:
             self.trash_points = 1
-            self.image = trash_images[0]
+            self.image = trash_images[random.randint(0, 2)]
             self.velocity = random.uniform(1.0, 3.0) if self.is_start_left else random.uniform(-3.0, -1.0)
-        elif 12 < choice < 18:
+        elif 30 < choice <= 40:
             self.trash_points = 2
-            self.trash_type = trash_types[1]
-            self.image = trash_images[1]
+            self.image = trash_images[random.randint(3, 4)]
             self.velocity = random.uniform(2.0, 4.0) if self.is_start_left else random.uniform(-4.0, -2.0)
-        else:
+        elif 40 < choice < 45:
             self.trash_points = 3
-            self.trash_type = trash_types[2]
-            self.image = trash_images[2]
-            self.velocity = random.uniform(4.0, 6.0) if self.is_start_left else random.uniform(-5.0, -6.0)
+            self.image = trash_images[random.randint(5, 6)]
+            self.velocity = random.uniform(2.5, 4.5) if self.is_start_left else random.uniform(-4.5, -2.5)
+        else:
+            self.trash_points = 4
+            self.image = trash_images[random.randint(7, 8)]
+            self.velocity = random.uniform(5.0, 7.0) if self.is_start_left else random.uniform(-7.0, -5.0)
         self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.image, self.angle))
 
     def draw_and_update(self, screen):

@@ -46,7 +46,7 @@ class Boat:
         radians = math.radians(self.angle)
         vertical = math.cos(radians) * self.vel
         horizontal = math.sin(radians) * self.vel
-
+        
         self.y -= vertical
         self.x -= horizontal
         self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
@@ -78,14 +78,14 @@ class Boat:
             if particle[2] <= 0:
                 self.particles.remove(particle)
 
-    def update_particles(self):
-        if self.vel > 0.5:
+    def update_particles(self, boat_dead):
+        if self.vel > 0.5 and not boat_dead:
             self.particles.append(
                 [[self.x + (boat_image.get_width() / 2), self.y + (boat_image.get_height() / 2)],
                  [random.randint(0, 20) / 10 - 1, -2],
                  random.randint(int(self.vel) * 3, int(self.vel + 2) * 3) * 0.9])
 
-    def move_to_whirlpool(self, whirlpool_cx, whirlpool_cy, area_of_whirlpool):
+    def move_to_whirlpool(self, whirlpool_cx, whirlpool_cy):
 
         force_x = float(whirlpool_cx - self.x) / 5
         force_y = float(whirlpool_cy - self.y) / 5
