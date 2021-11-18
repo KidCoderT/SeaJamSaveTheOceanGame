@@ -26,15 +26,15 @@ got_coin_anim_image = scale_image(pygame.image.load("assets/got coin anim img.pn
 
 whirl_pool_image = scale_image(pygame.image.load("assets/whirlpool.png"), 0.15)
 
-broken_boat_image = scale_image(pygame.image.load("assets/broken boat.png"), 0.15)
+# broken_boat_image = scale_image(pygame.image.load("assets/broken boat.png"), 0.15)
 
 shop_background = scale_image(pygame.image.load("assets/shop_bg.png"), 0.2)
 
-spicy_rice_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 32)
-spicy_rice_coin_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 24)
-spicy_rice_warning_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 64)
-spicy_rice_death_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 62)
-spicy_rice_death_subtitle_font = pygame.font.Font("fonts/SpicyRice-Regular.ttf", 20)
+spicy_rice_font = pygame.font.Font("fonts/SpicyRiceFont/SpicyRice-Regular.ttf", 32)
+spicy_rice_coin_font = pygame.font.Font("fonts/SpicyRiceFont/SpicyRice-Regular.ttf", 24)
+spicy_rice_warning_font = pygame.font.Font("fonts/SpicyRiceFont/SpicyRice-Regular.ttf", 64)
+spicy_rice_death_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 96)
+spicy_rice_death_subtitle_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 20)
 
 pause_image = pygame.image.load("assets/pause indicator and button.png")
 
@@ -45,4 +45,4 @@ lives_left_image = [
 ]
 lives_background_image = scale_image(pygame.image.load("assets/lives bg.png"), 0.4)
 
-sara = scale_image(pygame.image.load("assets/sara.png"), 2.5)
+# sara = scale_image(pygame.image.load("assets/sara.png"), 2.5)

@@ -21,15 +21,13 @@ class Boat:
         self.particles = []
         self.died = False
         self.death_time = None
-        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
+        self.whirlpool_pull_force_dividend = 0.03
 
     def rotate(self, left=False, right=False):
         if left:
             self.angle += self.rotation_vel
         elif right:
             self.angle -= self.rotation_vel
-
-        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
 
     def draw(self, win):
         blit_and_rotate_center(win, self.img, (self.x, self.y), self.angle)
@@ -46,10 +44,9 @@ class Boat:
         radians = math.radians(self.angle)
         vertical = math.cos(radians) * self.vel
         horizontal = math.sin(radians) * self.vel
-        
+
         self.y -= vertical
         self.x -= horizontal
-        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.img, self.angle))
 
     def collide(self, mask, x=0, y=0):
         boat_mask = pygame.mask.from_surface(self.img)
@@ -58,6 +55,7 @@ class Boat:
         return poi
 
     def reset(self):
+        self.img = self.IMG
         self.x, self.y = self.START_POS
         self.angle = 0
         self.vel = 0
@@ -90,5 +88,5 @@ class Boat:
         force_x = float(whirlpool_cx - self.x) / 5
         force_y = float(whirlpool_cy - self.y) / 5
 
-        self.x += (force_x - self.vel) * 0.05
-        self.y += (force_y - self.vel) * 0.05
+        self.x += (force_x - self.vel) * self.whirlpool_pull_force_dividend
+        self.y += (force_y - self.vel) * self.whirlpool_pull_force_dividend
