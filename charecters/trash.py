@@ -8,7 +8,7 @@ class Trash:
         self.is_start_left = True if random.randint(1, 2) == 1 else False
         self.is_start_right = True if not self.is_start_left else False
         self.x = -25 if self.is_start_left else SCREEN_WIDTH + 25
-        self.y = random.randint(30, SCREEN_HEIGHT - 30)
+        self.y = random.uniform(30, SCREEN_HEIGHT - 30)
         self.angle = 0
         self.left_angle = random.randint(315, 350)
         self.right_angle = random.randint(10, 45)

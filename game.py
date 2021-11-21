@@ -241,9 +241,9 @@ while running:
 
     lives_image_index = 3 - lives
 
-    screen.blit(lives_background_image, (SCREEN_WIDTH + 2, -2))
+    screen.blit(lives_background_image, (((SCREEN_WIDTH * 1.1) - lives_background_image.get_width()) + 10, -2))
     screen.blit(lives_left_image[lives_image_index],
-                (SCREEN_WIDTH + 10, 5))
+                (((SCREEN_WIDTH * 1.1) - lives_left_image[lives_image_index].get_width()) - 5, 3))
 
     pygame.display.update()
 
