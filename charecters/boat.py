@@ -7,21 +7,20 @@ from constants import *
 
 
 class Boat:
-    IMG = boat_image
-    START_POS = ((SCREEN_WIDTH / 2) - (IMG.get_width() / 2), (SCREEN_HEIGHT / 2) - (IMG.get_height() / 2))
 
     def __init__(self, max_vel, rotation_vel):
-        self.img = self.IMG
-        self.max_vel = max_vel
         self.vel = 0
-        self.rotation_vel = rotation_vel
         self.angle = 0
-        self.x, self.y = self.START_POS
         self.acceleration = 0.1
         self.particles = []
         self.died = False
         self.death_time = None
         self.whirlpool_pull_force_dividend = 0.03
+        self.scale_amount = 0.15
+        self.img = scale_image(boat_image, self.scale_amount)
+        self.max_vel = max_vel
+        self.rotation_vel = rotation_vel
+        self.x, self.y = ((SCREEN_WIDTH / 2) - (self.img.get_width() / 2), (SCREEN_HEIGHT / 2) - (self.img.get_height() / 2))
 
     def rotate(self, left=False, right=False):
         if left:
@@ -55,8 +54,8 @@ class Boat:
         return poi
 
     def reset(self):
-        self.img = self.IMG
-        self.x, self.y = self.START_POS
+        self.img = scale_image(boat_image, self.scale_amount)
+        self.x, self.y = ((SCREEN_WIDTH / 2) - (self.img.get_width() / 2), (SCREEN_HEIGHT / 2) - (self.img.get_height() / 2))
         self.angle = 0
         self.vel = 0
 
@@ -79,14 +78,22 @@ class Boat:
     def update_particles(self, boat_dead):
         if self.vel > 0.5 and not boat_dead:
             self.particles.append(
-                [[self.x + (boat_image.get_width() / 2), self.y + (boat_image.get_height() / 2)],
+                [[self.x + (self.img.get_width() / 2), self.y + (self.img.get_height() / 2)],
                  [random.randint(0, 20) / 10 - 1, -2],
                  random.randint(int(self.vel) * 3, int(self.vel + 2) * 3) * 0.9])
 
     def move_to_whirlpool(self, whirlpool_cx, whirlpool_cy):
-
         force_x = float(whirlpool_cx - self.x) / 5
         force_y = float(whirlpool_cy - self.y) / 5
 
-        self.x += (force_x - self.vel) * self.whirlpool_pull_force_dividend
-        self.y += (force_y - self.vel) * self.whirlpool_pull_force_dividend
+        self.x += (force_x) * self.whirlpool_pull_force_dividend
+        self.y += (force_y) * self.whirlpool_pull_force_dividend
+    
+    def speed_level(self):
+        return 1 if (self.max_vel == 3.0) else 2 if (self.max_vel == 3.5) else 3 if (self.max_vel == 4.0) else 4  if (self.max_vel == 4.5) else 5
+    
+    def rotation_level(self):
+        return 1 if (self.rotation_vel == 3.0) else 2 if (self.rotation_vel == 3.5) else 3 if (self.rotation_vel == 4.0) else 4  if (self.rotation_vel == 4.5) else 5
+
+    def scale_level(self):
+        return 1 if (self.scale_amount == 0.15) else 2 if (self.scale_amount == 0.2) else 3 if (self.scale_amount == 0.25) else 4  if (self.scale_amount == 0.3) else 5

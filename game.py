@@ -16,7 +16,6 @@ pygame.display.set_caption("Clean the Ocean")
 pygame.display.set_icon(pygame.image.load("assets/icon.ico"))
 screen_width, screen_height = (SCREEN_WIDTH, SCREEN_HEIGHT)
 game_display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-shop_display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 running = True
 
@@ -25,7 +24,7 @@ boat = Boat(3, 3)
 clock = pygame.time.Clock()
 trashes = [Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash()]
 coin_anim_sprites = []
-score = 25
+score = 0
 whirlpool = None
 screen_offset = [0, 0]
 last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
@@ -33,11 +32,13 @@ wait_time_to_increase_trash_amount = 5000
 last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
 whirl_pool_spawn_time = 10000
 paused = False
+shop_opened = False
 lives = 3
 death_done_wait_time = 0
 death_subtitle = ""
 last_time_to_update_whirlpool_pull_power_on_player = pygame.time.get_ticks()
 wait_time_to_update_whirlpool_pull_power_on_player = 23000
+mouse_clicked = False
 
 border_mask = pygame.mask.from_surface(
     pygame.transform.scale(pygame.image.load("assets/border.png"), (SCREEN_WIDTH + 16, SCREEN_HEIGHT + 30)))
@@ -51,8 +52,14 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 paused = not paused
+            if event.key == pygame.K_k:
+                shop_opened = not shop_opened
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_clicked = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            mouse_clicked = False
 
-    if not paused:
+    if not paused and not shop_opened:
         ocean.draw_and_update(game_display)
 
         if whirlpool is not None and not whirlpool.should_warn():
@@ -60,13 +67,13 @@ while running:
 
             if not boat.died:
 
-                boat_image = pygame.transform.rotate(boat.img, boat.angle).convert_alpha()
+                converted_boat_image = pygame.transform.rotate(boat.img, boat.angle).convert_alpha()
                 whirlpool_image = scale_image(whirlpool.image.copy(), 0.25).convert_alpha()
 
-                boat_mask = pygame.mask.from_surface(boat_image)
+                boat_mask = pygame.mask.from_surface(converted_boat_image)
                 whirlpool_mask = pygame.mask.from_surface(whirlpool_image)
                 whirlpool_rect = whirlpool_image.get_rect(center=(whirlpool.x, whirlpool.y))
-                boat_rect = boat_image.get_rect(center=(boat.x, boat.y))
+                boat_rect = converted_boat_image.get_rect(center=(boat.x, boat.y))
 
                 offset = (whirlpool_rect.x - boat_rect.x), (whirlpool_rect.y - boat_rect.y)
 
@@ -164,7 +171,7 @@ while running:
                         boat.death_time = pygame.time.get_ticks()
                         death_done_wait_time = 0
                         death_subtitle = "The whirlpool flung you off to the side and we lost connection to the " \
-                                         "boat, be careful!! "
+                                         "boat, be careful!!"
 
             elif boat.y > (SCREEN_HEIGHT - 10) or boat.y < -20:
                 if death_done_wait_time == 0:
@@ -176,8 +183,7 @@ while running:
                         boat.died = True
                         boat.death_time = pygame.time.get_ticks()
                         death_done_wait_time = 0
-                        death_subtitle = "The whirlpool flung you off to the side and made your boat get stuck " \
-                                         "onto our border destroying the boat in the process."
+                        death_subtitle = "The whirlpool flung you off onto our border destroying the boat in the process, be careful!!"
 
         for coin in coin_anim_sprites:
             coin.draw(game_display, spicy_rice_coin_font)
@@ -222,7 +228,7 @@ while running:
 
         if time_left >= 2300 and whirlpool is None:
             boat.reset()
-            boat.img = boat.IMG
+            boat.img = scale_image(boat_image, boat.scale_amount)
             boat.died = False
             last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
 
@@ -234,6 +240,41 @@ while running:
         screen.blit(pause_image, (
             (SCREEN_WIDTH * 1.1) / 2 - pause_image.get_width() / 2,
             (SCREEN_HEIGHT * 1.1) / 2 - pause_image.get_height() / 2))
+    
+    if shop_opened:
+        real_width = (SCREEN_WIDTH * 1.1)
+        real_height = (SCREEN_HEIGHT * 1.1)
+        items_y = ((real_height/2) - (shop_item_hitbox.get_height()/2)) + 90
+        item_1x = (real_width/2) - shop_item_hitbox.get_width() - 125
+        item_2x = (real_width/2) - (shop_item_hitbox.get_width()/2)
+        item_3x = (real_width/2) + 125
+        screen.blit(shop_background, ((real_width/2) - (shop_background.get_width()/2), (real_height/2) - (shop_background.get_height()/2)))
+        
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Speed item
+        if ((item_1x <= mouse_pos[0] <= item_1x + shop_item_hitbox.get_width()) and (items_y <= mouse_pos[1] <= items_y + shop_item_hitbox.get_height())):
+            screen.blit(scale_image(shop_item_hitbox, 1.02), (item_1x-2.5, items_y-2))
+            screen.blit(shop_speed_item[boat.speed_level()-1][0], (item_1x, items_y))
+
+            if mouse_clicked:
+                boat.max_vel += 0.5
+                mouse_clicked = False
+        else:
+            screen.blit(shop_speed_item[boat.speed_level()-1][0], (item_1x, items_y))
+        
+        # Rotation item
+        if ((item_2x <= mouse_pos[0] <= item_2x + shop_item_hitbox.get_width()) and (items_y <= mouse_pos[1] <= items_y + shop_item_hitbox.get_height())):
+            screen.blit(scale_image(shop_item_hitbox, 1.02), (item_2x-2.5, items_y-2))
+            screen.blit(shop_rotation_item[boat.rotation_level()-1][0], (item_2x, items_y))
+
+            if mouse_clicked:
+                boat.rotation_vel += 0.5
+                mouse_clicked = False
+        else:
+            screen.blit(shop_rotation_item[boat.rotation_level()-1][0], (item_2x, items_y))
+
+        screen.blit(shop_item_hitbox, (item_3x, items_y))
 
     screen.blit(score_background_image, (-2, -2))
     score_text = spicy_rice_font.render(str(score), "", pygame.Color(255, 255, 255))

@@ -8,7 +8,7 @@ SCREEN_HEIGHT = pygame.display.Info().current_h * 0.8
 ocean_color_1 = pygame.Color(11, 134, 210)
 ocean_color_2 = pygame.Color(21, 151, 229)
 
-boat_image = scale_image(pygame.image.load("assets/boat.png"), 0.15)
+boat_image = pygame.image.load("assets/boat.png")
 trash_images = [
     scale_image(pygame.image.load("assets/trash1.png"), 0.08),  # 0
     scale_image(pygame.image.load("assets/trash2.png"), 0.08),  # 1
@@ -28,7 +28,22 @@ whirl_pool_image = scale_image(pygame.image.load("assets/whirlpool.png"), 0.15)
 
 # broken_boat_image = scale_image(pygame.image.load("assets/broken boat.png"), 0.15)
 
-shop_background = scale_image(pygame.image.load("assets/shop_bg.png"), 0.2)
+shop_background = scale_image(pygame.image.load("assets/shop/shop_bg.png"), 0.18)
+shop_item_hitbox = scale_image(pygame.image.load("assets/shop/image.png"), 0.18)
+shop_speed_item = [
+    [scale_image(pygame.image.load("assets/shop/boat_speed/Lv1.png"), 0.18), 50],
+    [scale_image(pygame.image.load("assets/shop/boat_speed/Lv2.png"), 0.18), 120],
+    [scale_image(pygame.image.load("assets/shop/boat_speed/Lv3.png"), 0.18), 200],
+    [scale_image(pygame.image.load("assets/shop/boat_speed/Lv4.png"), 0.18), 250],
+    [scale_image(pygame.image.load("assets/shop/boat_speed/Lv5.png"), 0.18), 0]
+]
+shop_rotation_item = [
+    [scale_image(pygame.image.load("assets/shop/boat_rotation/Lv1.png"), 0.18), 20],
+    [scale_image(pygame.image.load("assets/shop/boat_rotation/Lv2.png"), 0.18), 50],
+    [scale_image(pygame.image.load("assets/shop/boat_rotation/Lv3.png"), 0.18), 120],
+    [scale_image(pygame.image.load("assets/shop/boat_rotation/Lv4.png"), 0.18), 200],
+    [scale_image(pygame.image.load("assets/shop/boat_rotation/Lv5.png"), 0.18), 0]
+]
 
 spicy_rice_font = pygame.font.Font("fonts/SpicyRiceFont/SpicyRice-Regular.ttf", 32)
 spicy_rice_coin_font = pygame.font.Font("fonts/SpicyRiceFont/SpicyRice-Regular.ttf", 24)
