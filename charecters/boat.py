@@ -90,10 +90,10 @@ class Boat:
         self.y += (force_y) * self.whirlpool_pull_force_dividend
     
     def speed_level(self):
-        return 1 if (self.max_vel == 3.0) else 2 if (self.max_vel == 3.5) else 3 if (self.max_vel == 4.0) else 4  if (self.max_vel == 4.5) else 5
+        return 1 if (self.max_vel == 3.0) else 2 if (self.max_vel == 3.5) else 3 if (self.max_vel == 4.0) else 4 if (self.max_vel == 4.5) else 5
     
     def rotation_level(self):
-        return 1 if (self.rotation_vel == 3.0) else 2 if (self.rotation_vel == 3.5) else 3 if (self.rotation_vel == 4.0) else 4  if (self.rotation_vel == 4.5) else 5
+        return 1 if (self.rotation_vel == 3.0) else 2 if (self.rotation_vel == 3.5) else 3 if (self.rotation_vel == 4.0) else 4 if (self.rotation_vel == 4.5) else 5
 
     def scale_level(self):
-        return 1 if (self.scale_amount == 0.15) else 2 if (self.scale_amount == 0.2) else 3 if (self.scale_amount == 0.25) else 4  if (self.scale_amount == 0.3) else 5
+        return 1 if (self.scale_amount == 0.15) else 2 if (self.scale_amount == 0.175) else 3 if (self.scale_amount == 0.2) else 4 if (self.scale_amount == 0.225) else 5

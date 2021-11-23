@@ -22,9 +22,10 @@ running = True
 ocean = Ocean(ocean_color_1, ocean_color_2, 5)
 boat = Boat(3, 3)
 clock = pygame.time.Clock()
-trashes = [Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash()]
+trashes_list = [Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash()]
 coin_anim_sprites = []
 score = 0
+trashes_collected = 0
 whirlpool = None
 screen_offset = [0, 0]
 last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
@@ -39,6 +40,7 @@ death_subtitle = ""
 last_time_to_update_whirlpool_pull_power_on_player = pygame.time.get_ticks()
 wait_time_to_update_whirlpool_pull_power_on_player = 23000
 mouse_clicked = False
+shop_msg = []
 
 border_mask = pygame.mask.from_surface(
     pygame.transform.scale(pygame.image.load("assets/border.png"), (SCREEN_WIDTH + 16, SCREEN_HEIGHT + 30)))
@@ -108,30 +110,31 @@ while running:
         if pygame.time.get_ticks() - last_time_taken_to_increase_trash_amount > wait_time_to_increase_trash_amount:
             last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
             wait_time_to_increase_trash_amount += 2500
-            trashes.append(Trash())
+            trashes_list.append(Trash())
 
         if pygame.time.get_ticks() - last_time_to_update_whirlpool_pull_power_on_player > wait_time_to_update_whirlpool_pull_power_on_player:
             last_time_to_update_whirlpool_pull_power_on_player = pygame.time.get_ticks()
             wait_time_to_update_whirlpool_pull_power_on_player -= 100
             boat.whirlpool_pull_force_dividend += 0.009
 
-        for trash in trashes:
+        for trash in trashes_list:
             trash.draw_and_update(game_display)
 
             if trash.has_crossed_edge():
-                trashes.remove(trash)
-                trashes.append(Trash())
+                trashes_list.remove(trash)
+                trashes_list.append(Trash())
 
             if whirlpool is not None:
                 if whirlpool.mask.overlap(trash.mask, (int(whirlpool.x - trash.x), int(whirlpool.y - trash.y))):
-                    trashes.remove(trash)
-                    trashes.append(Trash())
+                    trashes_list.remove(trash)
+                    trashes_list.append(Trash())
 
-            if not boat.died and boat.collide(trash.mask, trash.x, trash.y) and trashes.count(trash) != 0:
+            if not boat.died and boat.collide(trash.mask, trash.x, trash.y) and trashes_list.count(trash) != 0:
                 score += trash.trash_points
+                trashes_collected += 1
                 coin_anim_sprites.append(CoinGotAnimation(trash.x, trash.y, trash.trash_points))
-                trashes.remove(trash)
-                trashes.append(Trash())
+                trashes_list.remove(trash)
+                trashes_list.append(Trash())
 
         if whirlpool is not None and whirlpool.should_warn():
             whirlpool.warn(game_display, spicy_rice_warning_font)
@@ -257,34 +260,70 @@ while running:
             screen.blit(scale_image(shop_item_hitbox, 1.02), (item_1x-2.5, items_y-2))
             screen.blit(shop_speed_item[boat.speed_level()-1][0], (item_1x, items_y))
 
-            if mouse_clicked:
-                boat.max_vel += 0.5
+            if mouse_clicked and boat.speed_level() < 5:
+                if shop_speed_item[boat.speed_level()-1][1] <= score:
+                    score -= shop_speed_item[boat.speed_level()-1][1]
+                    boat.max_vel += 0.5
+                else:
+                    shop_msg.append([spicy_rice_warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                 mouse_clicked = False
         else:
             screen.blit(shop_speed_item[boat.speed_level()-1][0], (item_1x, items_y))
         
         # Rotation item
         if ((item_2x <= mouse_pos[0] <= item_2x + shop_item_hitbox.get_width()) and (items_y <= mouse_pos[1] <= items_y + shop_item_hitbox.get_height())):
-            screen.blit(scale_image(shop_item_hitbox, 1.02), (item_2x-2.5, items_y-2))
+            screen.blit(scale_image(shop_item_hitbox, 1.02), (item_2x-2, items_y-2))
             screen.blit(shop_rotation_item[boat.rotation_level()-1][0], (item_2x, items_y))
 
-            if mouse_clicked:
-                boat.rotation_vel += 0.5
+            if mouse_clicked and boat.rotation_level() < 5:
+                if shop_rotation_item[boat.rotation_level()-1][1] <= score:
+                    score -= shop_rotation_item[boat.rotation_level()-1][1]
+                    boat.rotation_vel += 0.5
+                else:
+                    shop_msg.append([spicy_rice_warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                 mouse_clicked = False
         else:
             screen.blit(shop_rotation_item[boat.rotation_level()-1][0], (item_2x, items_y))
 
-        screen.blit(shop_item_hitbox, (item_3x, items_y))
+        # Size item
+        if ((item_3x <= mouse_pos[0] <= item_3x + shop_item_hitbox.get_width()) and (items_y <= mouse_pos[1] <= items_y + shop_item_hitbox.get_height())):
+            screen.blit(scale_image(shop_item_hitbox, 1.02), (item_3x-2.5, items_y-2))
+            screen.blit(shop_size_item[boat.scale_level()-1][0], (item_3x, items_y))
 
-    screen.blit(score_background_image, (-2, -2))
+            if mouse_clicked and boat.scale_level() < 5:
+                if shop_rotation_item[boat.scale_level()-1][1] <= score:
+                    score -= shop_rotation_item[boat.scale_level()-1][1]
+                    boat.scale_amount = round(boat.scale_amount + 0.025, 3)
+                    boat.img = scale_image(boat_image, boat.scale_amount)
+                else:
+                    shop_msg.append([spicy_rice_warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
+                mouse_clicked = False
+        else:
+            screen.blit(shop_size_item[boat.scale_level()-1][0], (item_3x, items_y))
+
+    screen.blit(score_background_image, (-2, -3))
     score_text = spicy_rice_font.render(str(score), "", pygame.Color(255, 255, 255))
-    screen.blit(score_text, (110 - ((score_text.get_width() / 2) + 15), 15))
+    screen.blit(score_text, (110 - ((score_text.get_width() / 2) + 15), 10))
+    trashes_collected_text = spicy_rice_font.render(str(trashes_collected), "", pygame.Color(255, 255, 255))
+    screen.blit(trashes_collected_text, (110 - ((trashes_collected_text.get_width() / 2) + 15), 75))
 
     lives_image_index = 3 - lives
 
     screen.blit(lives_background_image, (((SCREEN_WIDTH * 1.1) - lives_background_image.get_width()) + 10, -2))
     screen.blit(lives_left_image[lives_image_index],
                 (((SCREEN_WIDTH * 1.1) - lives_left_image[lives_image_index].get_width()) - 5, 3))
+    
+    for msg in shop_msg:
+        if pygame.time.get_ticks() - msg[1] > 800:
+            shop_msg.remove(msg)
+        else:
+            screen.blit(msg[0], ((SCREEN_WIDTH*1.1)/2 - (msg[0].get_width()/2) - random.randint(-10, 10), (SCREEN_HEIGHT*1.1)/2 - (msg[0].get_height()/2)  - random.randint(-10, 10)))
+
+    info_text = spicy_rice_info_font.render("press P to pause/unpause", "", pygame.Color(255, 255, 255))
+    screen.blit(info_text, (10, (SCREEN_HEIGHT * 1.1) - 10 - info_text.get_height()))
+
+    info_text = spicy_rice_info_font.render("press K to open/close the store", "", pygame.Color(255, 255, 255))
+    screen.blit(info_text, ((SCREEN_WIDTH * 1.1) - 5 - info_text.get_width(), (SCREEN_HEIGHT * 1.1) - 5 - info_text.get_height()))
 
     pygame.display.update()
 
