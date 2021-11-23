@@ -26,7 +26,7 @@ got_coin_anim_image = scale_image(pygame.image.load("assets/got coin anim img.pn
 
 whirl_pool_image = scale_image(pygame.image.load("assets/whirlpool.png"), 0.15)
 
-# broken_boat_image = scale_image(pygame.image.load("assets/broken boat.png"), 0.15)
+broken_boat_image = scale_image(pygame.image.load("assets/broken boat.png"), 0.15)
 
 shop_background = scale_image(pygame.image.load("assets/shop_bg.png"), 0.18)
 shop_item_hitbox = scale_image(pygame.image.load("assets/image.png"), 0.18)
@@ -58,6 +58,11 @@ spicy_rice_warning_font = pygame.font.Font("fonts/SpicyRiceFont/SpicyRice-Regula
 spicy_rice_info_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 15)
 spicy_rice_death_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 80)
 spicy_rice_death_subtitle_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 20)
+death_screen_title_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 80)
+death_screen_subtitle_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 20)
+death_screen_button_font = pygame.font.Font("fonts/BungeeFont/Bungee-Regular.ttf", 24)
+death_screen_button_on_hover_font = pygame.font.Font("fonts/BungeeFont/Bungee-Regular.ttf", 30)
+death_screen_info_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 15)
 
 pause_image = pygame.image.load("assets/pause.png")
 

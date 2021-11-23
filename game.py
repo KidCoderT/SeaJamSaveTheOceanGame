@@ -1,4 +1,5 @@
 import random
+import sys
 
 from constants import *
 from charecters.boat import Boat
@@ -8,7 +9,7 @@ from charecters.whirlpool import WhirlPool
 from ocean import Ocean
 
 def run_game(screen):
-    game_display = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    game_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     running = True
 
@@ -31,7 +32,7 @@ def run_game(screen):
     death_done_wait_time = 0
     death_subtitle = ""
     last_time_to_update_whirlpool_pull_power_on_player = pygame.time.get_ticks()
-    wait_time_to_update_whirlpool_pull_power_on_player = 23000
+    wait_time_to_update_whirlpool_pull_power_on_player = 30000
     mouse_clicked = False
     shop_msg = []
 
@@ -44,6 +45,8 @@ def run_game(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     paused = not paused
@@ -55,10 +58,10 @@ def run_game(screen):
                 mouse_clicked = False
 
         if not paused and not shop_opened:
-            ocean.draw_and_update(game_display)
+            ocean.draw_and_update(game_surface)
 
             if whirlpool is not None and not whirlpool.should_warn():
-                whirlpool.draw(game_display)
+                whirlpool.draw(game_surface)
 
                 if not boat.died:
 
@@ -98,7 +101,7 @@ def run_game(screen):
                 screen_offset[1] = random.randint(0, 8) - 4
 
             if not boat.died and boat.img is not None:
-                boat.draw_particles(game_display)
+                boat.draw_particles(game_surface)
 
             if pygame.time.get_ticks() - last_time_taken_to_increase_trash_amount > wait_time_to_increase_trash_amount:
                 last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
@@ -111,7 +114,7 @@ def run_game(screen):
                 boat.whirlpool_pull_force_dividend += 0.009
 
             for trash in trashes_list:
-                trash.draw_and_update(game_display)
+                trash.draw_and_update(game_surface)
 
                 if trash.has_crossed_edge():
                     trashes_list.remove(trash)
@@ -130,10 +133,10 @@ def run_game(screen):
                     trashes_list.append(Trash())
 
             if whirlpool is not None and whirlpool.should_warn():
-                whirlpool.warn(game_display, spicy_rice_warning_font)
+                whirlpool.warn(game_surface, spicy_rice_warning_font)
 
             if not boat.died:
-                boat.draw(game_display)
+                boat.draw(game_surface)
 
                 keys = pygame.key.get_pressed()
                 moved = False
@@ -182,7 +185,7 @@ def run_game(screen):
                             death_subtitle = "The whirlpool flung you off onto our border destroying the boat in the process, be careful!!"
 
             for coin in coin_anim_sprites:
-                coin.draw(game_display, spicy_rice_coin_font)
+                coin.draw(game_surface, spicy_rice_coin_font)
                 coin.update()
 
                 now = pygame.time.get_ticks()
@@ -200,7 +203,7 @@ def run_game(screen):
 
             boat.update_particles(boat.died)
 
-        screen.blit(pygame.transform.scale(game_display, (SCREEN_WIDTH * 1.1, SCREEN_HEIGHT * 1.1)), screen_offset)
+        screen.blit(pygame.transform.scale(game_surface, (SCREEN_WIDTH * 1.1, SCREEN_HEIGHT * 1.1)), screen_offset)
 
         if boat.died:
             time_left = pygame.time.get_ticks() - boat.death_time
