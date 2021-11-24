@@ -8,18 +8,31 @@ from pygame.transform import scale
 pygame.init()
 
 from game import *
-from death_screen import show_death_screen
+from screens import death_screen, main_menu_screen
 
 screen = pygame.display.set_mode((SCREEN_WIDTH * 1.1, SCREEN_HEIGHT * 1.1))
 pygame.display.set_caption("Clean the Ocean")
 pygame.display.set_icon(pygame.image.load("assets/icon.ico"))
 
+should_replay = False
 while True:
+	if not should_replay:
+		can_play_game = main_menu_screen(screen)
+		if not can_play_game:
+			break
+		elif can_play_game == "howtoplay":
+			print("okay")
+	else:
+		should_replay = False
+
 	trashes_collected = run_game(screen)
-	should_continue = show_death_screen(screen, trashes_collected)
-	
+	should_continue = death_screen(screen, trashes_collected)
+
 	if not should_continue:
 		break
+	
+	if should_continue == "replay":
+		should_replay = True
 
 pygame.quit()
 sys.exit()
