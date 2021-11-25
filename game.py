@@ -83,9 +83,9 @@ def run_game(screen):
                         boat.img = None
                         boat.died = True
                         boat.death_time = pygame.time.get_ticks()
-                        death_subtitle = "You got sucked into the whirlpool be careful they have a very strong " \
-                                        "pull force. "
                         death_done_wait_time = 0
+                        death_subtitle = "You got sucked into the whirlpool be careful they have a very strong " \
+                                "pull force. "
                     else:
                         boat.move_to_whirlpool(whirlpool.x, whirlpool.y)
 
@@ -263,7 +263,6 @@ def run_game(screen):
 
             if time_left >= 2300 and whirlpool is None:
                 boat.reset()
-                death_by_whirlpool = False
                 boat.img = scale_image(boat_image, boat.scale_amount)
                 boat.died = False
                 last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
