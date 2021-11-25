@@ -74,3 +74,28 @@ lives_left_image = [
 lives_background_image = scale_image(pygame.image.load("assets/lives bg.png"), 0.4)
 
 # sara = scale_image(pygame.image.load("assets/sara.png"), 2.5)
+
+goo_image_list = [
+    scale_image(pygame.image.load("assets/gas/Gas.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-1.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-2.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-3.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-4.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-5.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-6.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-7.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-8.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-9.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-10.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-11.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-12.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-13.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-14.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-15.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-16.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-17.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-18.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-19.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-20.png"), 0.17),
+    scale_image(pygame.image.load("assets/gas/Gas-21.png"), 0.17)
+]

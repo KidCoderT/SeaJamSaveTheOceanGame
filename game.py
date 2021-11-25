@@ -5,7 +5,7 @@ from constants import *
 from charecters.boat import Boat
 from charecters.trash import Trash
 from charecters.coin_anim import CoinGotAnimation
-from charecters.whirlpool import WhirlPool
+from charecters.enemies import WhirlPool, DeadlyAcidicGoo
 from ocean import Ocean
 
 def run_game(screen):
@@ -17,6 +17,7 @@ def run_game(screen):
     boat = Boat(3, 3)
     clock = pygame.time.Clock()
     trashes_list = [Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash()]
+    goops_list = []
     coin_anim_sprites = []
     coins = 0
     trashes_collected = 0
@@ -31,10 +32,13 @@ def run_game(screen):
     lives = 3
     death_done_wait_time = 0
     death_subtitle = ""
+    died_by_goop = False
     last_time_to_update_whirlpool_pull_power_on_player = pygame.time.get_ticks()
-    wait_time_to_update_whirlpool_pull_power_on_player = 30000
+    wait_time_to_update_whirlpool_pull_power_on_player = 20000
     mouse_clicked = False
     shop_msg = []
+    new_goop_creation_wait_time = random.randint(2, 5) * 1000
+    new_goop_creation_last_time_counted = pygame.time.get_ticks()
 
     border_mask = pygame.mask.from_surface(
         pygame.transform.scale(pygame.image.load("assets/border.png"), (SCREEN_WIDTH + 16, SCREEN_HEIGHT + 30)))
@@ -68,7 +72,6 @@ def run_game(screen):
                     converted_boat_image = pygame.transform.rotate(boat.img, boat.angle).convert_alpha()
                     whirlpool_image = scale_image(whirlpool.image.copy(), 0.25).convert_alpha()
 
-                    boat_mask = pygame.mask.from_surface(converted_boat_image)
                     whirlpool_mask = pygame.mask.from_surface(whirlpool_image)
                     whirlpool_rect = whirlpool_image.get_rect(center=(whirlpool.x, whirlpool.y))
                     boat_rect = converted_boat_image.get_rect(center=(boat.x, boat.y))
@@ -112,6 +115,31 @@ def run_game(screen):
                 last_time_to_update_whirlpool_pull_power_on_player = pygame.time.get_ticks()
                 wait_time_to_update_whirlpool_pull_power_on_player -= 100
                 boat.whirlpool_pull_force_dividend += 0.009
+            
+            for goop in goops_list:
+                game_surface.blit(goop.image, (goop.x - goop.image.get_width() / 2, goop.y - goop.image.get_height() / 2))
+
+                if not boat.died:
+                    if boat.collide(goop.mask, goop.x, goop.y) is not None or died_by_goop:
+                        died_by_goop = True
+                        if death_done_wait_time == 0:
+                            boat.img = broken_boat_image
+                            boat.broken = True
+                            death_done_wait_time = pygame.time.get_ticks()
+                        else:
+                            if pygame.time.get_ticks() - death_done_wait_time >= 800:
+                                lives -= 1
+                                boat.img = None
+                                boat.died = True
+                                boat.death_time = pygame.time.get_ticks()
+                                death_done_wait_time = 0
+                                death_subtitle = "You got Stuck in the acidic goop melting your boat. Be Carefull!"
+                                died_by_goop = False
+
+                if goop.x <= -30 - goop.image.get_width() or goop.x >= (SCREEN_WIDTH*1.1) + 30 + goop.image.get_width():
+                    goops_list.remove(goop)
+                else:
+                    goop.update()
 
             for trash in trashes_list:
                 trash.draw_and_update(game_surface)
@@ -159,8 +187,10 @@ def run_game(screen):
                 if boat.collide(border_mask) is not None:
                     boat.bounce()
 
-                if not (-20 < boat.y < SCREEN_HEIGHT + 10):
+                if not (-15 < boat.y < SCREEN_HEIGHT - 15):
                     if death_done_wait_time == 0:
+                        boat.img = broken_boat_image
+                        boat.broken = True
                         death_done_wait_time = pygame.time.get_ticks()
                     else:
                         if pygame.time.get_ticks() - death_done_wait_time >= 800:
@@ -172,8 +202,9 @@ def run_game(screen):
                             death_subtitle = "The whirlpool flung you off to the side and we lost connection to the " \
                                             "boat, be careful!!"
 
-                elif boat.y > (SCREEN_HEIGHT - 10) or boat.y < -20:
+                elif boat.y > (SCREEN_HEIGHT - (boat.img.get_height()/3) * 2) or boat.y < (boat.img.get_height()/3) * -2:
                     if death_done_wait_time == 0:
+                        boat.img = broken_boat_image
                         death_done_wait_time = pygame.time.get_ticks()
                     else:
                         if pygame.time.get_ticks() - death_done_wait_time >= 800:
@@ -193,9 +224,14 @@ def run_game(screen):
                     coin_anim_sprites.remove(coin)
 
             if pygame.time.get_ticks() - last_time_taken_to_create_whirlpool > max(5000,
-                                                                                whirl_pool_spawn_time) and trashes_collected > 25 and whirlpool is None and not boat.died:
+                                                                                whirl_pool_spawn_time) and trashes_collected > 10 and whirlpool is None and not boat.died:
                 whirlpool = WhirlPool()
                 last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
+            
+            if pygame.time.get_ticks() - new_goop_creation_last_time_counted > new_goop_creation_wait_time and trashes_collected > 20:
+                goops_list.append(DeadlyAcidicGoo())
+                new_goop_creation_last_time_counted = pygame.time.get_ticks()
+                new_goop_creation_wait_time = random.randint(2, 5) * 1000
 
             if lives == 0:
                 running = False
@@ -227,6 +263,7 @@ def run_game(screen):
 
             if time_left >= 2300 and whirlpool is None:
                 boat.reset()
+                death_by_whirlpool = False
                 boat.img = scale_image(boat_image, boat.scale_amount)
                 boat.died = False
                 last_time_taken_to_create_whirlpool = pygame.time.get_ticks()

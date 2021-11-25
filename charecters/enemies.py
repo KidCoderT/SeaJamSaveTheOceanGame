@@ -5,7 +5,6 @@ import pygame.draw
 
 from constants import *
 
-
 class WhirlPool:
     def __init__(self):
         self.image = scale_image(whirl_pool_image, random.uniform(1.0, 1.6))
@@ -38,3 +37,15 @@ class WhirlPool:
         self.y += self.y_distance / self.velocity
         self.angle += 5
         self.mask = pygame.mask.from_surface(self.image)
+
+class DeadlyAcidicGoo:
+    def __init__(self):
+        self.image = scale_image(random.choice(goo_image_list), random.uniform(1.0, 1.5))
+        self.x = random.choice([-10 - self.image.get_width(), (SCREEN_WIDTH*1.1) + 10 + self.image.get_width()])
+        self.y = random.randint(50, int(SCREEN_HEIGHT) - 50)
+        self.mask = pygame.mask.from_surface(scale_image(self.image, 0.4))
+        self.velocity = random.uniform(-2, -6) if self.x > 0 else random.uniform(2, 6)
+
+    def update(self):
+        self.x += self.velocity
+        self.mask = pygame.mask.from_surface(scale_image(self.image, 0.4))

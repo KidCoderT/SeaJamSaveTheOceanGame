@@ -61,25 +61,8 @@ def main_menu_screen(screen):
 			continue_button_text = death_screen_button_font.render("PLAY!", "", (255, 255, 255))
 			screen.blit(continue_button_text, ((continue_btn_x + 200) - (continue_button_text.get_width()/2), (continue_btn_y + 25) - (continue_button_text.get_height()/2)))
 
-		# Instructions Button
-		instructions_btn_x, instructions_btn_y = (115, ((SCREEN_HEIGHT*1.1)/5) * 2.5)
-		instructions_button = pygame.Rect(instructions_btn_x, instructions_btn_y, 400, 50)
-		if instructions_button.collidepoint((mx, my)):
-			pygame.draw.rect(screen, (255, 255, 255), (instructions_btn_x - 2.5, instructions_btn_y - 2.5, 405, 55))
-			if mouse_pressed:
-				run_game = "howtoplay"
-				exited = True
-		pygame.draw.rect(screen, (0, 18, 35), instructions_button)
-
-		if instructions_button.collidepoint((mx, my)):
-			instructions_button_text = death_screen_button_on_hover_font.render("HOW TO PLAY!", "", (255, 255, 255))
-			screen.blit(instructions_button_text, ((instructions_btn_x + 200) - (instructions_button_text.get_width()/2), (instructions_btn_y + 25) - (instructions_button_text.get_height()/2)))
-		else:
-			instructions_button_text = death_screen_button_font.render("HOW TO PLAY!", "", (255, 255, 255))
-			screen.blit(instructions_button_text, ((instructions_btn_x + 200) - (instructions_button_text.get_width()/2), (instructions_btn_y + 25) - (instructions_button_text.get_height()/2)))
-
 		# Exit Button
-		exit_btn_x, exit_btn_y = (115, ((SCREEN_HEIGHT*1.1)/5) * 2.8)
+		exit_btn_x, exit_btn_y = (115, continue_btn_y + 50 + 10)
 		exit_button = pygame.Rect(exit_btn_x, exit_btn_y, 400, 50)
 		if exit_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (exit_btn_x - 2.5, exit_btn_y - 2.5, 405, 55))
@@ -106,7 +89,7 @@ def death_screen(screen, trashes_collected):
 	should_grow = True
 	mouse_pressed = False
 	while not exited:
-		screen.fill((240, 79, 76))
+		screen.fill((250, 79, 76))
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -137,9 +120,9 @@ def death_screen(screen, trashes_collected):
 		screen.blit(broken_boat, (boat_cx - broken_boat.get_width()/2, boat_cy - broken_boat.get_height()/2))
 
 		you_died_text = death_screen_title_font.render("Game Over!", "", (255, 255, 255))
-		screen.blit(you_died_text, (100, ((SCREEN_HEIGHT*1.1)/5) * 1.5))
+		screen.blit(you_died_text, (100, ((SCREEN_HEIGHT*1.1)/5) * 1.37))
 		you_died_subtitle_text = death_screen_subtitle_font.render(f"You collected {trashes_collected} trashes!", "", (255, 255, 255))
-		screen.blit(you_died_subtitle_text, (120, ((SCREEN_HEIGHT*1.1)/5) * 1.5 + you_died_text.get_height() - 20))
+		screen.blit(you_died_subtitle_text, (120, ((SCREEN_HEIGHT*1.1)/5) * 1.4 + you_died_text.get_height() - you_died_subtitle_text.get_height()))
 
 		mx, my = pygame.mouse.get_pos()
 
@@ -163,7 +146,7 @@ def death_screen(screen, trashes_collected):
 			screen.blit(replay_button_text, ((replay_btn_x + 200) - (replay_button_text.get_width()/2), (replay_btn_y + 25) - (replay_button_text.get_height()/2)))
 
 		# Main Menu Button
-		main_menu_btn_x, main_menu_btn_y = (115, ((SCREEN_HEIGHT*1.1)/5) * 2.5)
+		main_menu_btn_x, main_menu_btn_y = (115, replay_btn_y + 50 + 10)
 		main_menu_button = pygame.Rect(main_menu_btn_x, main_menu_btn_y, 400, 50)
 		if main_menu_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (main_menu_btn_x - 2.5, main_menu_btn_y - 2.5, 405, 55))
@@ -179,7 +162,7 @@ def death_screen(screen, trashes_collected):
 			screen.blit(main_menu_button_text, ((main_menu_btn_x + 200) - (main_menu_button_text.get_width()/2), (main_menu_btn_y + 25) - (main_menu_button_text.get_height()/2)))
 
 		# Exit Button
-		exit_btn_x, exit_btn_y = (115, ((SCREEN_HEIGHT*1.1)/5) * 2.8)
+		exit_btn_x, exit_btn_y = (115, main_menu_btn_y + 50 + 10)
 		exit_button = pygame.Rect(exit_btn_x, exit_btn_y, 400, 50)
 		if exit_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (exit_btn_x - 2.5, exit_btn_y - 2.5, 405, 55))
@@ -195,8 +178,8 @@ def death_screen(screen, trashes_collected):
 			exit_button_text = death_screen_button_font.render("EXIT!", "", (255, 255, 255))
 			screen.blit(exit_button_text, ((exit_btn_x + 200) - (exit_button_text.get_width()/2), (exit_btn_y + 25) - (exit_button_text.get_height()/2)))
 		
-		msg = "This is a game By Tejas. And this is his first ever game created with python and pygame for the SeaJam game jam which also happens to be my very first game jam so I really hope this game was good and thank you for playing it."
-		draw_text(screen, msg, (255, 255, 255), (105, ((SCREEN_HEIGHT*1.1)/5) * 3.05, 500, 500), death_screen_info_font)
+		msg = "This is a game By the KCT. And this is his first ever game created with python and pygame for the SeaJam game jam which also happens to be my very first game jam so I really hope this game was good and thank you for playing it."
+		draw_text_multilined(screen, msg, (255, 255, 255), (105, exit_btn_y + 50 + 10, 500, 500), death_screen_info_font)
 		
 		pygame.display.update()
 	

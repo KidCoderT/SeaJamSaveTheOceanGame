@@ -15,7 +15,7 @@ def blit_text_center(win, font, text):
     win.blit(render, (win.get_width() / 2 - render.get_width() /
                       2, win.get_height() / 2 - render.get_height() / 2))
 
-def draw_text(surface, text, color, rect, font, aa=False, bkg=None):
+def draw_text_multilined(surface, text, color, rect, font, aa=False, bkg=None):
     rect = pygame.Rect(rect)
     y = rect.top
     line_spacing = 3

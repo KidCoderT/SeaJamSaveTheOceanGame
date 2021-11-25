@@ -1,9 +1,5 @@
 import sys
 import pygame
-import tkinter as tk
-from tkinter import ttk
-
-from pygame.transform import scale
 
 pygame.init()
 
