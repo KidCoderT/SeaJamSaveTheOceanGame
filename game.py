@@ -161,7 +161,7 @@ def run_game(screen):
                     trashes_list.append(Trash())
 
             if whirlpool is not None and whirlpool.should_warn():
-                whirlpool.warn(game_surface, spicy_rice_warning_font)
+                whirlpool.warn(game_surface, warning_font)
 
             if not boat.died:
                 boat.draw(game_surface)
@@ -284,6 +284,12 @@ def run_game(screen):
             item_2x = (real_width/2) - (shop_item_hitbox.get_width()/2)
             item_3x = (real_width/2) + 125
             screen.blit(shop_background, ((real_width/2) - (shop_background.get_width()/2), (real_height/2) - (shop_background.get_height()/2)))
+
+            shop_banner_x, shop_banner_y = ((real_width/2) - (shop_title_and_coins_banner.get_width()/2), (real_height/2) - 200 - shop_title_and_coins_banner.get_height())
+            screen.blit(shop_title_and_coins_banner, (shop_banner_x, shop_banner_y))  
+            
+            coins_text = spicy_rice_font.render(str(coins), "", (255, 255, 255))
+            screen.blit(coins_text, (shop_banner_x + (shop_title_and_coins_banner.get_width()/2) - (coins_text.get_width()/2), shop_banner_y + shop_title_and_coins_banner.get_height() - 40))
             
             mouse_pos = pygame.mouse.get_pos()
 
@@ -297,7 +303,7 @@ def run_game(screen):
                         coins -= shop_speed_item[boat.speed_level()-1][1]
                         boat.max_vel += 0.5
                     else:
-                        shop_msg.append([spicy_rice_warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
+                        shop_msg.append([warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                     mouse_clicked = False
             else:
                 screen.blit(shop_speed_item[boat.speed_level()-1][0], (item_1x, items_y))
@@ -312,7 +318,7 @@ def run_game(screen):
                         coins -= shop_rotation_item[boat.rotation_level()-1][1]
                         boat.rotation_vel += 0.5
                     else:
-                        shop_msg.append([spicy_rice_warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
+                        shop_msg.append([warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                     mouse_clicked = False
             else:
                 screen.blit(shop_rotation_item[boat.rotation_level()-1][0], (item_2x, items_y))
@@ -328,16 +334,34 @@ def run_game(screen):
                         boat.scale_amount = round(boat.scale_amount + 0.025, 3)
                         boat.img = scale_image(boat_image, boat.scale_amount)
                     else:
-                        shop_msg.append([spicy_rice_warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
+                        shop_msg.append([warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                     mouse_clicked = False
             else:
                 screen.blit(shop_size_item[boat.scale_level()-1][0], (item_3x, items_y))
 
         screen.blit(score_background_image, (-2, -3))
-        score_text = spicy_rice_font.render(str(coins), "", pygame.Color(255, 255, 255))
-        screen.blit(score_text, (110 - ((score_text.get_width() / 2) + 15), 10))
         trashes_collected_text = spicy_rice_font.render(str(trashes_collected), "", pygame.Color(255, 255, 255))
-        screen.blit(trashes_collected_text, (110 - ((trashes_collected_text.get_width() / 2) + 15), 75))
+        screen.blit(trashes_collected_text, (110 - ((trashes_collected_text.get_width() / 2) + 20), 10))
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        pause_btn_x = ((SCREEN_WIDTH * 1.1) - lives_background_image.get_width()) - pause_btn[0].get_width() + 5
+        if pause_btn_x <= mouse_pos[0] <= pause_btn_x + pause_btn[0].get_width() and 5 < mouse_pos[1] < 5 +pause_btn[0].get_height():
+            screen.blit(pause_btn[1] if not paused else unpause_btn[1], (pause_btn_x + ((pause_btn[0].get_width() - pause_btn[1].get_width())/2), 5))
+            if mouse_clicked:
+                paused = not paused
+                mouse_clicked = False
+        else:
+            screen.blit(pause_btn[0] if not paused else unpause_btn[0], (pause_btn_x, 5))
+        
+        shop_btn_x = ((SCREEN_WIDTH * 1.1) - lives_background_image.get_width()) - pause_btn[0].get_width() - shop_btn[0].get_width()
+        if shop_btn_x <= mouse_pos[0] <= shop_btn_x + shop_btn[0].get_width() and 5 < mouse_pos[1] < 5 + shop_btn[0].get_height():
+            screen.blit(shop_btn[1] if not shop_opened else close_shop_btn[1], (shop_btn_x + ((shop_btn[0].get_width() - shop_btn[1].get_width())/2), 5))
+            if mouse_clicked:
+                shop_opened = not shop_opened
+                mouse_clicked = False
+        else:
+            screen.blit(shop_btn[0] if not shop_opened else close_shop_btn[0], (shop_btn_x, 5))
 
         lives_image_index = 3 - lives
 
@@ -346,15 +370,15 @@ def run_game(screen):
                     (((SCREEN_WIDTH * 1.1) - lives_left_image[lives_image_index].get_width()) - 5, 3))
         
         for msg in shop_msg:
-            if pygame.time.get_ticks() - msg[1] > 800:
+            if pygame.time.get_ticks() - msg[1] > 1100:
                 shop_msg.remove(msg)
             else:
-                screen.blit(msg[0], ((SCREEN_WIDTH*1.1)/2 - (msg[0].get_width()/2) - random.randint(-10, 10), (SCREEN_HEIGHT*1.1)/2 - (msg[0].get_height()/2)  - random.randint(-10, 10)))
+                screen.blit(msg[0], ((SCREEN_WIDTH*1.1)/2 - (msg[0].get_width()/2) - random.randint(-5, 5), (SCREEN_HEIGHT*1.1)/2 - (msg[0].get_height()/2)  - random.randint(-5, 5)))
 
-        info_text = spicy_rice_info_font.render("press P to pause/unpause", "", pygame.Color(255, 255, 255))
+        info_text = info_font.render("press P to pause  /  unpause", "", pygame.Color(255, 255, 255))
         screen.blit(info_text, (10, (SCREEN_HEIGHT * 1.1) - 10 - info_text.get_height()))
 
-        info_text = spicy_rice_info_font.render("press K to open/close the store", "", pygame.Color(255, 255, 255))
+        info_text = info_font.render("press K to open  /  close the store", "", pygame.Color(255, 255, 255))
         screen.blit(info_text, ((SCREEN_WIDTH * 1.1) - 5 - info_text.get_width(), (SCREEN_HEIGHT * 1.1) - 5 - info_text.get_height()))
 
         pygame.display.update()

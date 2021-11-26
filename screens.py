@@ -20,7 +20,7 @@ def main_menu_screen(screen):
 			else:
 				mouse_pressed = False
 		
-		boat = pygame.transform.rotate(scale_image(pygame.image.load("assets/boat.png"), 0.8), 30)
+		boat = pygame.transform.rotate(scale_image(pygame.image.load("assets/boat.png"), 0.8), 330)
 		boat_cx, boat_cy = ((SCREEN_WIDTH*1.1) - ((SCREEN_WIDTH*1.1)/4), (SCREEN_HEIGHT*1.1)/2)
 		pygame.draw.circle(screen, ocean_color_1, (boat_cx, boat_cy), circle_radius + 100)
 		pygame.draw.circle(screen, ocean_color_2, (boat_cx, boat_cy), circle_radius)
@@ -38,15 +38,15 @@ def main_menu_screen(screen):
 
 		screen.blit(boat, (boat_cx - boat.get_width()/2, boat_cy - boat.get_height()/2))
 
-		you_died_text = death_screen_title_font.render("Boat Game!", "", (255, 255, 255))
-		screen.blit(you_died_text, (100, ((SCREEN_HEIGHT*1.1)/5) * 1.5))
+		game_title_text = death_screen_title_font.render(game_name, "", (255, 255, 255))
+		screen.blit(game_title_text, (100, ((SCREEN_HEIGHT*1.1)/5) * 2.25 - game_title_text.get_height() - 10))
 
 		mx, my = pygame.mouse.get_pos()
 
 		mx, my = pygame.mouse.get_pos()
 
 		# Continue Button
-		continue_btn_x, continue_btn_y = (115, ((SCREEN_HEIGHT*1.1)/5) * 2.2)
+		continue_btn_x, continue_btn_y = (115, ((SCREEN_HEIGHT*1.1)/5) * 2.25)
 		continue_button = pygame.Rect(continue_btn_x, continue_btn_y, 400, 50)
 		if continue_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (continue_btn_x - 2.5, continue_btn_y - 2.5, 405, 55))
@@ -122,7 +122,7 @@ def death_screen(screen, trashes_collected):
 		you_died_text = death_screen_title_font.render("Game Over!", "", (255, 255, 255))
 		screen.blit(you_died_text, (100, ((SCREEN_HEIGHT*1.1)/5) * 1.37))
 		you_died_subtitle_text = death_screen_subtitle_font.render(f"You collected {trashes_collected} trashes!", "", (255, 255, 255))
-		screen.blit(you_died_subtitle_text, (120, ((SCREEN_HEIGHT*1.1)/5) * 1.4 + you_died_text.get_height() - you_died_subtitle_text.get_height()))
+		screen.blit(you_died_subtitle_text, (120, ((SCREEN_HEIGHT*1.1)/5) * 1.4 + you_died_text.get_height()))
 
 		mx, my = pygame.mouse.get_pos()
 

@@ -19,7 +19,7 @@ class WhirlPool:
 
     def warn(self, screen, font):
         # pygame.draw.line(screen, (1, 61, 141), (self.x, self.y), (self.node_pos[0], self.node_pos[1]), 7)
-        text = font.render("WHIRLPOOLS ALERT!!!!", "", pygame.Color(255, 0, 0))
+        text = font.render("WHIRLPOOL ALERT!!!!", "", pygame.Color(255, 0, 0))
         screen.blit(text, ((SCREEN_WIDTH / 2) - (text.get_width() / 2), SCREEN_HEIGHT - 100))
 
     def should_warn(self):
