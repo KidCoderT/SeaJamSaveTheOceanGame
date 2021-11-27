@@ -124,3 +124,16 @@ close_shop_btn = [
 ]
 
 shop_title_and_coins_banner = scale_image(pygame.image.load("assets/shop_title_and_coins.png"), 0.18)
+
+death_sounds = [
+    pygame.mixer.Sound("assets/sfx/Death.wav"),
+    pygame.mixer.Sound("assets/sfx/Death2.wav"),
+    pygame.mixer.Sound("assets/sfx/Death3.wav")
+]
+
+click_sounds = pygame.mixer.Sound("assets/sfx/click.wav")
+
+pickup_sound = pygame.mixer.Sound("assets/sfx/Pickup.wav")
+pickup_sound.set_volume(0.1)
+
+whirlpool_sound = pygame.mixer.Sound("assets/sfx/whirlpool.wav")

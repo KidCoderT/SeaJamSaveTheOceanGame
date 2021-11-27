@@ -2,6 +2,7 @@ import sys
 import pygame
 
 pygame.init()
+pygame.mixer.init()
 
 from game import *
 from screens import death_screen, main_menu_screen
@@ -22,7 +23,7 @@ while True:
 		should_replay = False
 
 	trashes_collected = run_game(screen)
-	should_continue = death_screen(screen, trashes_collected)
+	should_continue = death_screen(screen, 55)
 
 	if not should_continue:
 		break

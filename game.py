@@ -20,7 +20,7 @@ def run_game(screen):
     goops_list = []
     coin_anim_sprites = []
     coins = 0
-    trashes_collected = 0
+    trashes_collected = 100
     whirlpool = None
     screen_offset = [0, 0]
     last_time_taken_to_increase_trash_amount = pygame.time.get_ticks()
@@ -79,6 +79,9 @@ def run_game(screen):
                     offset = (whirlpool_rect.x - boat_rect.x), (whirlpool_rect.y - boat_rect.y)
 
                     if whirlpool_mask.overlap(whirlpool_mask, offset):
+                        death_sounds[0].play()
+                        death_sounds[1].play()
+                        death_sounds[2].play()
                         lives -= 1
                         boat.img = None
                         boat.died = True
@@ -123,6 +126,9 @@ def run_game(screen):
                     if boat.collide(goop.mask, goop.x, goop.y) is not None or died_by_goop:
                         died_by_goop = True
                         if death_done_wait_time == 0:
+                            death_sounds[0].play()
+                            death_sounds[1].play()
+                            death_sounds[2].play()
                             boat.img = broken_boat_image
                             boat.broken = True
                             death_done_wait_time = pygame.time.get_ticks()
@@ -155,6 +161,7 @@ def run_game(screen):
 
                 if not boat.died and boat.collide(trash.mask, trash.x, trash.y) and trashes_list.count(trash) != 0:
                     coins += trash.trash_points
+                    pickup_sound.play()
                     trashes_collected += 1
                     coin_anim_sprites.append(CoinGotAnimation(trash.x, trash.y, trash.trash_points))
                     trashes_list.remove(trash)
@@ -189,6 +196,9 @@ def run_game(screen):
 
                 if not (-15 < boat.y < SCREEN_HEIGHT - 15):
                     if death_done_wait_time == 0:
+                        death_sounds[0].play()
+                        death_sounds[1].play()
+                        death_sounds[2].play()
                         boat.img = broken_boat_image
                         boat.broken = True
                         death_done_wait_time = pygame.time.get_ticks()
@@ -204,6 +214,9 @@ def run_game(screen):
 
                 elif boat.y > (SCREEN_HEIGHT - (boat.img.get_height()/3) * 2) or boat.y < (boat.img.get_height()/3) * -2:
                     if death_done_wait_time == 0:
+                        death_sounds[0].play()
+                        death_sounds[1].play()
+                        death_sounds[2].play()
                         boat.img = broken_boat_image
                         death_done_wait_time = pygame.time.get_ticks()
                     else:

@@ -51,6 +51,7 @@ def main_menu_screen(screen):
 		if continue_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (continue_btn_x - 2.5, continue_btn_y - 2.5, 405, 55))
 			if mouse_pressed:
+				click_sounds.play()
 				exited = True
 		pygame.draw.rect(screen, (0, 18, 35), continue_button)
 
@@ -67,6 +68,7 @@ def main_menu_screen(screen):
 		if exit_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (exit_btn_x - 2.5, exit_btn_y - 2.5, 405, 55))
 			if mouse_pressed:
+				click_sounds.play()
 				run_game = False
 				exited = True
 		pygame.draw.rect(screen, (0, 18, 35), exit_button)
@@ -134,6 +136,7 @@ def death_screen(screen, trashes_collected):
 		if replay_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (replay_btn_x - 2.5, replay_btn_y - 2.5, 405, 55))
 			if mouse_pressed:
+				click_sounds.play()
 				run_game = "replay"
 				exited = True
 		pygame.draw.rect(screen, (0, 18, 35), replay_button)
@@ -151,6 +154,7 @@ def death_screen(screen, trashes_collected):
 		if main_menu_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (main_menu_btn_x - 2.5, main_menu_btn_y - 2.5, 405, 55))
 			if mouse_pressed:
+				click_sounds.play()
 				exited = True
 		pygame.draw.rect(screen, (0, 18, 35), main_menu_button)
 
@@ -167,6 +171,7 @@ def death_screen(screen, trashes_collected):
 		if exit_button.collidepoint((mx, my)):
 			pygame.draw.rect(screen, (255, 255, 255), (exit_btn_x - 2.5, exit_btn_y - 2.5, 405, 55))
 			if mouse_pressed:
+				click_sounds.play()
 				run_game = False
 				exited = True
 		pygame.draw.rect(screen, (0, 18, 35), exit_button)

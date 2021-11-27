@@ -48,4 +48,4 @@ class DeadlyAcidicGoo:
 
     def update(self):
         self.x += self.velocity
-        self.mask = pygame.mask.from_surface(scale_image(self.image, 0.4))
+        self.mask = pygame.mask.from_surface(scale_image(self.image, 0.7))
