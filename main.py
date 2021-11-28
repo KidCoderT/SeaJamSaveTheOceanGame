@@ -11,6 +11,9 @@ screen = pygame.display.set_mode((SCREEN_WIDTH * 1.1, SCREEN_HEIGHT * 1.1))
 pygame.display.set_caption(game_name)
 pygame.display.set_icon(pygame.image.load("assets/icon.ico"))
 
+pygame.mixer.music.load("assets/sfx/main_theme.wav")
+pygame.mixer.music.play(-1)
+
 should_replay = False
 while True:
 	if not should_replay:

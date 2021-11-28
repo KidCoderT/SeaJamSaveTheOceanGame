@@ -281,6 +281,7 @@ def run_game(screen):
                 last_time_taken_to_create_whirlpool = pygame.time.get_ticks()
 
         if paused:
+            pygame.mixer.music.set_volume(0.2)
             transparent_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
             transparent_surface.set_alpha(128)
             transparent_surface.fill((255, 255, 255))
@@ -290,6 +291,7 @@ def run_game(screen):
                 (SCREEN_HEIGHT * 1.1) / 2 - pause_image.get_height() / 2))
         
         if shop_opened:
+            pygame.mixer.music.set_volume(0.2)
             real_width = (SCREEN_WIDTH * 1.1)
             real_height = (SCREEN_HEIGHT * 1.1)
             items_y = ((real_height/2) - (shop_item_hitbox.get_height()/2)) + 90
@@ -357,6 +359,9 @@ def run_game(screen):
                     mouse_clicked = False
             else:
                 screen.blit(shop_size_item[boat.scale_level()-1][0], (item_3x, items_y))
+        
+        if not paused and not shop_opened:
+            pygame.mixer.music.set_volume(1.0)
 
         screen.blit(score_background_image, (-2, -3))
         trashes_collected_text = spicy_rice_font.render(str(trashes_collected), "", pygame.Color(255, 255, 255))
