@@ -79,7 +79,6 @@ lives_background_image = scale_image(pygame.image.load("assets/lives bg.png"), 0
 # sara = scale_image(pygame.image.load("assets/sara.png"), 2.5)
 
 goo_image_list = [
-    scale_image(pygame.image.load("assets/goo/Goo.png"), 0.17),
     scale_image(pygame.image.load("assets/goo/Goo-1.png"), 0.17),
     scale_image(pygame.image.load("assets/goo/Goo-2.png"), 0.17),
     scale_image(pygame.image.load("assets/goo/Goo-3.png"), 0.17),
@@ -99,8 +98,7 @@ goo_image_list = [
     scale_image(pygame.image.load("assets/goo/Goo-17.png"), 0.17),
     scale_image(pygame.image.load("assets/goo/Goo-18.png"), 0.17),
     scale_image(pygame.image.load("assets/goo/Goo-19.png"), 0.17),
-    scale_image(pygame.image.load("assets/goo/Goo-20.png"), 0.17),
-    scale_image(pygame.image.load("assets/goo/Goo-21.png"), 0.17)
+    scale_image(pygame.image.load("assets/goo/Goo-20.png"), 0.17)
 ]
 
 pause_btn = [
