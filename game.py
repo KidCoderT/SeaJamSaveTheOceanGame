@@ -19,7 +19,7 @@ def run_game(screen):
     trashes_list = [Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash(), Trash()]
     goops_list = []
     coin_anim_sprites = []
-    coins = 0
+    coins = 100
     trashes_collected = 100
     whirlpool = None
     screen_offset = [0, 0]
@@ -314,8 +314,10 @@ def run_game(screen):
                 if mouse_clicked and boat.speed_level() < 5:
                     if shop_speed_item[boat.speed_level()-1][1] <= coins:
                         coins -= shop_speed_item[boat.speed_level()-1][1]
+                        purchased_sound.play()
                         boat.max_vel += 0.5
                     else:
+                        not_enough_coins_sound.play()
                         shop_msg.append([warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                     mouse_clicked = False
             else:
@@ -329,8 +331,10 @@ def run_game(screen):
                 if mouse_clicked and boat.rotation_level() < 5:
                     if shop_rotation_item[boat.rotation_level()-1][1] <= coins:
                         coins -= shop_rotation_item[boat.rotation_level()-1][1]
+                        purchased_sound.play()
                         boat.rotation_vel += 0.5
                     else:
+                        not_enough_coins_sound.play()
                         shop_msg.append([warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                     mouse_clicked = False
             else:
@@ -344,9 +348,11 @@ def run_game(screen):
                 if mouse_clicked and boat.scale_level() < 5:
                     if shop_rotation_item[boat.scale_level()-1][1] <= coins:
                         coins -= shop_rotation_item[boat.scale_level()-1][1]
+                        purchased_sound.play()
                         boat.scale_amount = round(boat.scale_amount + 0.025, 3)
                         boat.img = scale_image(boat_image, boat.scale_amount)
                     else:
+                        not_enough_coins_sound.play()
                         shop_msg.append([warning_font.render("Not enough coins", "", pygame.Color(255, 0, 0)), pygame.time.get_ticks()])
                     mouse_clicked = False
             else:

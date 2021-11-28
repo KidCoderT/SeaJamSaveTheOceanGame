@@ -137,3 +137,7 @@ pickup_sound = pygame.mixer.Sound("assets/sfx/Pickup.wav")
 pickup_sound.set_volume(0.1)
 
 whirlpool_sound = pygame.mixer.Sound("assets/sfx/whirlpool.wav")
+
+not_enough_coins_sound = pygame.mixer.Sound("assets/sfx/not_enough_coins.wav")
+
+purchased_sound = pygame.mixer.Sound("assets/sfx/purchased.wav")
