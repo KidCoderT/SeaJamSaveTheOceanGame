@@ -26,7 +26,7 @@ while True:
 		should_replay = False
 
 	trashes_collected = run_game(screen)
-	should_continue = death_screen(screen, 55)
+	should_continue = death_screen(screen, trashes_collected)
 
 	if not should_continue:
 		break
