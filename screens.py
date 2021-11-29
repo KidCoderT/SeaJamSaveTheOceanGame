@@ -1,7 +1,7 @@
 import pygame, sys
 from constants import *
 
-def main_menu_screen(screen):
+def main_menu_screen(screen, highscore):
 	run_game = True
 	exited = False
 	circle_radius = 0
@@ -80,11 +80,14 @@ def main_menu_screen(screen):
 			exit_button_text = death_screen_button_font.render("EXIT!", "", (255, 255, 255))
 			screen.blit(exit_button_text, ((exit_btn_x + 200) - (exit_button_text.get_width()/2), (exit_btn_y + 25) - (exit_button_text.get_height()/2)))
 		
+		highscore_text = highscore_font.render(f"Highscore: {highscore} pieces of trash", "", (255, 255, 255))
+		screen.blit(highscore_text, (exit_btn_x, exit_btn_y + 60))
+
 		pygame.display.update()
 	
 	return run_game
 
-def death_screen(screen, trashes_collected):
+def death_screen(screen, trashes_collected, new_score=False):
 	run_game = True
 	exited = False
 	circle_radius = 0
@@ -123,7 +126,8 @@ def death_screen(screen, trashes_collected):
 
 		you_died_text = death_screen_title_font.render("Game Over!", "", (255, 255, 255))
 		screen.blit(you_died_text, (100, ((SCREEN_HEIGHT*1.1)/5) * 1.37))
-		you_died_subtitle_text = death_screen_subtitle_font.render(f"You collected {trashes_collected} trashes!", "", (255, 255, 255))
+		extra = "" if not new_score else " A new HighScore!!!!!!!"
+		you_died_subtitle_text = death_screen_subtitle_font.render(f"You collected {trashes_collected} pieces of trash! {extra}", "", (255, 255, 255))
 		screen.blit(you_died_subtitle_text, (120, ((SCREEN_HEIGHT*1.1)/5) * 1.4 + you_died_text.get_height()))
 
 		mx, my = pygame.mouse.get_pos()

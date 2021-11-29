@@ -27,11 +27,11 @@ score_background_image = scale_image(pygame.image.load("assets/score_bg.png"), 0
 
 got_coin_anim_image = scale_image(pygame.image.load("assets/got coin anim img.png"), 0.2)
 
-whirl_pool_image = scale_image(pygame.image.load("assets/whirlpool.png"), 0.15)
+whirl_pool_image = scale_image(pygame.image.load("assets/whirlpool.png"), 0.25)
 
 broken_boat_image = scale_image(pygame.image.load("assets/broken boat.png"), 0.15)
 
-shop_background = scale_image(pygame.image.load("assets/shop_bg.png"), 0.18)
+shop_background = scale_image(pygame.image.load("assets/shop_bg.png"), 0.6)
 shop_item_hitbox = scale_image(pygame.image.load("assets/image.png"), 0.18)
 shop_speed_item = [
     [scale_image(pygame.image.load("assets/boat_speed/Lv1.png"), 0.18), 50],
@@ -66,13 +66,14 @@ death_screen_subtitle_font = pygame.font.Font("fonts/BungeeFont/Bungee-Regular.t
 death_screen_button_font = pygame.font.Font("fonts/BungeeFont/Bungee-Regular.ttf", 24)
 death_screen_button_on_hover_font = pygame.font.Font("fonts/BungeeFont/Bungee-Regular.ttf", 30)
 death_screen_info_font = pygame.font.Font("fonts/FingerPaintFont/FingerPaint-Regular.ttf", 15)
+highscore_font = pygame.font.Font("fonts/BungeeFont/Bungee-Regular.ttf", 20)
 
 pause_image = pygame.image.load("assets/pause.png")
 
 lives_left_image = [
-    scale_image(pygame.image.load("assets/lives/3 life.png"), 0.1),
-    scale_image(pygame.image.load("assets/lives/2 life.png"), 0.1),
-    scale_image(pygame.image.load("assets/lives/1 life.png"), 0.1)
+    scale_image(pygame.image.load("assets/lives/3 life.png"), 0.12),
+    scale_image(pygame.image.load("assets/lives/2 life.png"), 0.12),
+    scale_image(pygame.image.load("assets/lives/1 life.png"), 0.12)
 ]
 lives_background_image = scale_image(pygame.image.load("assets/lives bg.png"), 0.4)
 

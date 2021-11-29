@@ -52,3 +52,14 @@ def draw_text_multilined(surface, text, color, rect, font, aa=False, bkg=None):
         text = text[i:]
 
     return text
+
+def get_highscore():
+    highscore_file = open("data/highscore.txt")
+    score = highscore_file.readlines()[0]
+    highscore_file.close()
+    return int(score)
+
+def new_highscore(new_score):
+    highscore_file = open("data/highscore.txt", "w")
+    highscore_file.write(str(new_score))
+    highscore_file.close()

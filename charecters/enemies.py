@@ -7,7 +7,7 @@ from constants import *
 
 class WhirlPool:
     def __init__(self):
-        self.image = scale_image(whirl_pool_image, random.uniform(1.0, 1.6))
+        self.image = scale_image(whirl_pool_image, random.uniform(1.2, 1.6))
         self.velocity = random.uniform(300, 400)
         self.x = random.uniform(100, SCREEN_WIDTH - 100)
         self.y = 0 - self.image.get_height() - 10
